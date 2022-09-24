@@ -13,6 +13,8 @@ public class Customer implements DataTransferObject {
     private String address;
     private String city;
     private String state;
+    private String zipCode;
+
 
     @Override
     public long getId() {
@@ -86,9 +88,4 @@ public class Customer implements DataTransferObject {
     public void setZipCode(String zipCode) {
         this.zipCode = zipCode;
     }
-
-    private String zipCode;
-
-
-
 }

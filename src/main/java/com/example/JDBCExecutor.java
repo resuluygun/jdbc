@@ -13,14 +13,20 @@ public class JDBCExecutor {
                     "postgres",
                     "password");
         try {
-
             Connection connection = dcm.getConnection();
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("select count(1) from customer");
+            CustomerDAO customerDAO = new CustomerDAO(connection);
+            Customer customer = new Customer();
+            customer.setFirstName("Resul");
+            customer.setLastName("Uygun");
+            customer.setCity("Ankara");
+            customer.setAddress("Aytmatov Caddesi");
+            customer.setEmail("res@gmail.com");
+            customer.setState("Yenimahall");
+            customer.setZipCode("06100");
+            customer.setPhone("02223237723");
 
-            while (resultSet.next()){
-                System.out.println(resultSet.getInt(1));
-            }
+            customerDAO.create(customer);
+
 
         }catch (SQLException e){
             e.printStackTrace();
