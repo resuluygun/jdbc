@@ -14,14 +14,18 @@ public class JDBCExecutor {
             Connection connection = dcm.getConnection();
             CustomerDAO customerDAO = new CustomerDAO(connection);
 
-            Customer customer= customerDAO.findById(10000);
+            Customer customer= customerDAO.findById(10001);
             System.out.println("before update: ");
-            System.out.println(customer.getFirstName() + " " + customer.getLastName() + " " +customer.getEmail());
+            System.out.println(customer);
 
-            customer.setEmail("res@gmail.com");
+            customer.setLastName("Coskun");
+            customer.setState("Kecioren");
+
             customerDAO.update(customer);
             System.out.println("after update: ");
-            System.out.println(customer.getFirstName() + " " + customer.getLastName() + " " +customer.getEmail());
+            System.out.println(customer);
+
+            customerDAO.delete(customer.getId());
 
         }catch (SQLException e){
             e.printStackTrace();
