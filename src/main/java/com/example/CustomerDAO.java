@@ -1,7 +1,6 @@
 package com.example;
 
 import com.example.util.DataAccessObject;
-import com.example.util.DataTransferObject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,6 +13,9 @@ public class CustomerDAO extends DataAccessObject<Customer> {
                                         "VALUES(?, ?, ?, ?, ?, ?, ?, ?);";
     private static final String GET_ONE = "SELECT customer_id, first_name, last_name, email, phone, address, city, state, zipcode from customer " +
                                           "where customer_id = ?";
+
+    private static final String UPDATE = "UPDATE customer SET first_name= ?, last_name= ?,  email= ?, phone= ?, address= ?, city= ?, state= ?, " +
+                                         "zipcode= ? where customer_id= ?";
     public CustomerDAO(Connection connection) {
         super(connection);
     }
@@ -51,11 +53,34 @@ public class CustomerDAO extends DataAccessObject<Customer> {
 
     @Override
     public Customer update(Customer dto) {
-        return null;
+        Customer customer;
+
+        try(PreparedStatement statement = this.connection.prepareStatement(UPDATE)){
+            statement.setString(1, dto.getFirstName());
+            statement.setString(2, dto.getLastName());
+            statement.setString(3, dto.getEmail());
+            statement.setString(4, dto.getPhone());
+            statement.setString(5, dto.getAddress());
+            statement.setString(6, dto.getCity());
+            statement.setString(7, dto.getState());
+            statement.setString(8, dto.getZipCode());
+            statement.setLong(9, dto.getId());
+
+            statement.execute();
+            System.out.println("customer updated");
+            customer =this.findById(dto.getId());
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        return customer;
+
     }
 
     @Override
     public Customer create(Customer dto) {
+        int id;
         try(PreparedStatement statement = this.connection.prepareStatement(INSERT)){
             statement.setString(1, dto.getFirstName());
             statement.setString(2, dto.getLastName());
@@ -67,15 +92,15 @@ public class CustomerDAO extends DataAccessObject<Customer> {
             statement.setString(8, dto.getZipCode());
 
             statement.execute();
+            id = this.getLastVal(CUSTOMER_SEQUENCE);
 
-            int id = this.getLastVal(CUSTOMER_SEQUENCE);
             System.out.println("customer inserted");
-            return this.findById(id);
 
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
+        return this.findById(id);
     }
 
     @Override
