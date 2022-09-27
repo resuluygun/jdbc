@@ -13,9 +13,9 @@ public class JDBCExecutor {
         try {
             Connection connection = dcm.getConnection();
             CustomerDAO customerDAO = new CustomerDAO(connection);
-            OrdersDAO ordersDAO = new OrdersDAO(connection);
+            OrderDAO orderDAO = new OrderDAO(connection);
 
-            Orders order = ordersDAO.findById(1000);
+            Order order = orderDAO.findById(1000);
             System.out.println(order);
 
 
