@@ -13,19 +13,12 @@ public class JDBCExecutor {
         try {
             Connection connection = dcm.getConnection();
             CustomerDAO customerDAO = new CustomerDAO(connection);
+            OrdersDAO ordersDAO = new OrdersDAO(connection);
 
-            Customer customer= customerDAO.findById(10001);
-            System.out.println("before update: ");
-            System.out.println(customer);
+            Orders order = ordersDAO.findById(1000);
+            System.out.println(order);
 
-            customer.setLastName("Coskun");
-            customer.setState("Kecioren");
 
-            customerDAO.update(customer);
-            System.out.println("after update: ");
-            System.out.println(customer);
-
-            customerDAO.delete(customer.getId());
 
         }catch (SQLException e){
             e.printStackTrace();
